@@ -10,8 +10,8 @@ import cesur.examen.core.worker.WorkerService;
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Alejandro Álvarez Mérida
+ * Fecha: 11-12-2023
  */
 public class App 
 {
@@ -27,7 +27,7 @@ public class App
 
 
     // Put your full name in the constant value
-    static final String STUDENT_NAME = "Francisco Romero";
+    static final String STUDENT_NAME = "Alejandro Álvarez Mérida";
 
     // filename for csv output.
     static final String FILE_NAME = "output.csv";

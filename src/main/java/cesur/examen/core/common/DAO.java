@@ -6,8 +6,8 @@ import java.util.List;
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Alejandro Álvarez Mérida
+ * Fecha: 11-12-2023
  */
 public interface DAO<T> {
     /* Basic CRUD operations */

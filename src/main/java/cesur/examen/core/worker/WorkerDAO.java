@@ -4,7 +4,10 @@ import cesur.examen.core.common.DAO;
 import cesur.examen.core.common.JDBCUtils;
 import lombok.extern.java.Log;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +15,8 @@ import java.util.List;
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Alejandro Álvarez Mérida
+ * Fecha: 11-12-2023
  *
  * No se permite escribir en consola desde las clases DAO, Service y Utils usando System.out.
  * En su lugar, usa log.info(), log.warning() y log.severe() para mostrar información interna
@@ -22,9 +25,9 @@ import java.util.List;
 @Log public class WorkerDAO implements DAO<Worker> {
 
     /* Please, use this constants for the queries */
-    private final String QUERY_ORDER_BY = "";
+    private final String QUERY_ORDER_BY = "Select * from trabajador order by desde";
     private final String QUERY_BY_DNI = "Select * from trabajador where dni=?";
-    private final String UPDATE_BY_ID = "";
+    private final String UPDATE_BY_ID = "Update trabajador set nombre=?, dni=?, desde=? where id=?";
 
     @Override
     public Worker save(Worker worker) {
@@ -39,11 +42,18 @@ import java.util.List;
      */
     @Override
     public Worker update(Worker worker) {
-        Worker out = null;
+        try (PreparedStatement st = JDBCUtils.getConn().prepareStatement(UPDATE_BY_ID)) {
+            st.setString(1, worker.getName());
+            st.setString(2, worker.getDni());
+            st.setDate(3, JDBCUtils.dateUtilToSQL(worker.getFrom()));
+            st.setLong(4, worker.getId());
 
-        /* Make implementation here ...  */
+        } catch (SQLException e) {
+            log.severe("Error in update(): " + e.getMessage());
+            throw new RuntimeException(e);
+        }
 
-        return out;
+        return worker;
     }
 
     @Override
@@ -103,7 +113,20 @@ import java.util.List;
     public List<Worker> getAllOrderByFrom(){
         ArrayList<Worker> out = new ArrayList<>(0);
 
-        /* Make implementation here ...  */
+        try (Statement st = JDBCUtils.getConn().createStatement()) {
+            ResultSet rs = st.executeQuery(QUERY_ORDER_BY);
+            while (rs.next()) {
+                Worker w = new Worker();
+                w.setId(rs.getLong("id"));
+                w.setName(rs.getString("nombre"));
+                w.setDni(rs.getString("dni"));
+                w.setFrom(rs.getDate("desde"));
+                out.add(w);
+            }
+        } catch (SQLException e) {
+            log.severe("Error in getAllOrderByFrom(): " + e.getMessage());
+            throw new RuntimeException(e);
+        }
 
         return out;
     }

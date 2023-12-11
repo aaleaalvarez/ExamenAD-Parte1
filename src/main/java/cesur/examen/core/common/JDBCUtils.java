@@ -4,14 +4,13 @@ import lombok.extern.java.Log;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
 
 /**
  * EXAMEN DE ACCESO A DATOS
  * Diciembre 2023
  *
- * Nombre del alumno:
- * Fecha:
+ * Nombre del alumno: Alejandro Álvarez Mérida
+ * Fecha: 11-12-2023
  *
  * No se permite escribir en consola desde las clases DAO, Service y Utils usando System.out.
  * En su lugar, usa log.info(), log.warning() y log.severe() para mostrar información interna
@@ -31,17 +30,18 @@ public class JDBCUtils {
 
     static{
 
-        try{
+        try {
+            String url = "jdbc:mysql://localhost:3306/examenad";
+            String username = "root";
+            String password = "04112003";
 
-            conn = null;
-            /* Make implementation here ...  */
+            conn = DriverManager.getConnection(url, username, password);
+            log.info("Base de datos conectada");
 
-            if(conn==null) log.info("JDBCUtils Not implemented yet!");
-            else log.info("Succesfully connected!");
-
-        }catch( Exception ex){
-            log.severe("Error connecting to database");
-            throw new RuntimeException("Error connecting to database");
+        } catch (Exception ex) {
+            log.severe("Error al conectar a la base de datos");
+            log.severe(ex.getMessage());
+            throw new RuntimeException("Error al conectar a la base de datos", ex);
         }
     }
 
